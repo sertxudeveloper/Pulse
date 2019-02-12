@@ -1,0 +1,202 @@
+
+main::-webkit-scrollbar {
+  width: 5px;
+}
+
+main::-webkit-scrollbar-track {
+  background: #666;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: #ddd;
+}
+
+body {
+  user-select: none;
+  cursor: default;
+}
+
+
+body>#app {
+  height: calc(100vh - 60px);
+}
+
+body>#app>nav {
+  height: 60px;
+}
+
+body>#app>nav~div.container-fluid {
+  margin-top: 60px;
+}
+
+body>#app>nav~div.container-fluid nav {
+  width: 71px;
+  background-color: #2e3338;
+  box-shadow: 0.25rem 0 1rem rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+body>#app>nav~div.container-fluid main {
+  width: calc(100% - 71px);
+  height: calc(100% - 60px);
+  background-color: #3d3d3d;
+}
+
+#droparea {
+  height: calc(100% - 2rem);
+  width: calc(100% - 2rem);
+  position: absolute;
+  display: none;
+  z-index: 10;
+}
+
+#droparea>div>div {
+  height: 400px;
+  width: 400px;
+  border-radius: 50%;
+  transition: all .5s ease;
+  background-color: rgba(0, 123, 255, 0.5);
+  position: fixed;
+}
+
+#droparea.success>div>div {
+  background-color: rgba(0, 255, 21, 0.5);
+}
+
+.navbar-brand {
+  width: 75px;
+  font-size: 30px;
+  background-color: rgba(0, 0, 0, 0.45);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.45);
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+  border-width: 0;
+  border-radius: 0;
+}
+
+.form-control-dark {
+  color: #fff!important;
+  background-color: rgba(255, 255, 255, .1)!important;
+  border-color: rgba(255, 255, 255, .1)!important;
+  box-shadow: none!important;
+}
+
+::placeholder {
+  color: #a0a0a0!important;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.audio-container {
+  height: 60px;
+  background-color: #242424;
+  color: #fff!important;
+}
+
+.audio-container i {
+  font-size: 20px;
+}
+
+.plyr--audio .plyr__controls {
+  background-color: #242424;
+  color: #fff!important;
+}
+
+.plyr, .plyr__controls {
+  height: 100%;
+}
+
+.plyr__controls i {
+  display: flex;
+  align-items: center;
+  height: 18px;
+  width: 18px;
+}
+
+.p-1.plyr__control svg {
+  height: 24px;
+  width: 24px;
+}
+
+.plyr__progress {
+  position: absolute;
+  left: 0;
+  margin: 0!important;
+  top: -10px;
+  width: 100%;
+  z-index: 1;
+}
+
+.plyr--full-ui input[type=range]::-webkit-slider-thumb {
+  height: 13px;
+  width: 13px;
+  margin-top: -4px;
+  opacity: 0;
+  transition: all .5s ease;
+}
+.plyr--full-ui input[type=range] {
+  color: #ff3348;
+}
+
+.plyr--full-ui input[type=range]:hover::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.plyr__details {
+  line-height: 20px;
+}
+
+.text-muted {
+  color: #b3b3b3!important;
+}
+
+.plyr__details i {
+  font-size: inherit;
+  width: inherit;
+  height: inherit;
+  display: inherit;
+  align-items: inherit;
+}
+
+.plyr--full-ui input[type=range].plyr__tab-focus::-webkit-slider-runnable-track {
+  box-shadow: none!important;
+}
+
+.plyr__control.plyr__tab-focus {
+  box-shadow: 0 0 5px 2px rgba(26, 175, 255, .5);
+  outline: 0;
+}
+
+.details .options {
+  display: none;
+  top: 5px;
+  right: -10px;
+  font-size: 15px;
+}
+
+.details:hover .options {
+  display: block;
+}
+
+.options-container {
+  display: none;
+  z-index: 100;
+  box-shadow: 2px 2px 5px 0 black;
+  background-color: #242424;
+  top: 5px;
+  left: 100%;
+  width: 230px;
+  color: #fafafa;
+}
+
+.options-container ul li:hover {
+  background-color: #3d3d3d;
+}
