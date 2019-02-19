@@ -3,15 +3,16 @@ const fs = require('fs')
 const path = require('path')
 const queue = require('async/queue')
 const ObjectID = require('mongodb').ObjectID
-const mp3Duration = require('mp3-duration');
+const mp3Duration = require('mp3-duration')
+const md5 = require('js-md5')
 
-const Song = require('../collections/song').default
+const Song = require('../collections/songCollection').default
 const SongCollection = new Song()
 
-const Artist = require('../collections/artist').default
+const Artist = require('../collections/artistCollection').default
 const ArtistCollection = new Artist()
 
-const Album = require('../collections/album').default
+const Album = require('../collections/albumCollection').default
 const AlbumCollection = new Album()
 
 const route = process.argv[2]
@@ -24,23 +25,23 @@ const userRoute = process.argv[3]
 const taskQueue = queue((route, callback) => {
   jsmediatags.read(route, {
     onSuccess: async (media) => {
-      const pictureName = media.tags.album.trim() + '.jpeg'
+
+      if (!media.tags.picture.data) return null
+
+      const {data} = media.tags.picture
+      const byteArray = new Uint8Array(data)
+      const hash = md5(byteArray)
+      const pictureName = hash + '.jpeg'
       const routePath = path.join(userRoute, 'pictures')
       const picturePath = path.join(routePath, pictureName)
 
       if (!fs.existsSync(routePath)) fs.mkdirSync(routePath)
 
       if (!fs.existsSync(picturePath)) {
-        createPictureFile()
+        fs.writeFileSync(picturePath, byteArray)
       } else {
         let stats = fs.statSync(picturePath)
-        if (!stats.size) createPictureFile()
-      }
-
-      function createPictureFile () {
-        if (media.tags.picture.data) {
-          const {data} = media.tags.picture
-          const byteArray = new Uint8Array(data)
+        if (!stats.size) {
           fs.writeFileSync(picturePath, byteArray)
         }
       }
@@ -52,7 +53,7 @@ const taskQueue = queue((route, callback) => {
 
         for (let key in metaArtists) {
           const el = metaArtists[key]
-          let response = await ArtistCollection.firstOrCreate({name: el.trim(), picture: picturePath})
+          let response = await ArtistCollection.firstOrCreate({name: el.trim()}, {picture: picturePath})
           let _id = (response.value) ? response.value._id : response.lastErrorObject.upserted
           artists.push(ObjectID(_id))
         }
@@ -60,7 +61,7 @@ const taskQueue = queue((route, callback) => {
       })
 
       let saveAlbum = new Promise(async (resolve, reject) => {
-        let response = await AlbumCollection.firstOrCreate({name: media.tags.album.trim(), picture: picturePath})
+        let response = await AlbumCollection.firstOrCreate({name: media.tags.album.trim()}, {picture: picturePath})
         let _id = (response.value) ? response.value._id : response.lastErrorObject.upserted
         resolve(ObjectID(_id))
       })
@@ -77,10 +78,10 @@ const taskQueue = queue((route, callback) => {
             return null
           }
 
-          mp3Duration('file.mp3', async function (err, duration) {
-            if (err) return console.log(err.message);
+          mp3Duration(route, async function (err, duration) {
+            if (err) return console.log(err.message)
             song.duration = duration
-            let response = await SongCollection.firstOrCreate(song)
+            let response = await SongCollection.firstOrCreate({title: song.title}, song)
             if (response.value && response.value._id) {
               let text = 'Song "' + song.title + '" already added'
               process.send({text, type: 'warning', layout: 'topRight', timeout: 3000, queue: 'warning'})
@@ -92,7 +93,7 @@ const taskQueue = queue((route, callback) => {
             }
 
             callback()
-          });
+          })
         })
       })
     },

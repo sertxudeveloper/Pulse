@@ -3,7 +3,7 @@ const MongoClient = require('mongodb').MongoClient
 class Database {
   constructor (url, dbName) {
     this.url = url || 'mongodb://localhost:27017'
-    this.dbName = dbName || 'music'
+    this.dbName = dbName || 'pulse'
   }
 
   connect () {

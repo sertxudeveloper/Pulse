@@ -33,13 +33,13 @@
         </div>
         <div class="col-12 mt-4">
           <div class="border-bottom d-flex justify-content-between mb-2 pb-2">
-            <h4 class="mb-0">Tracks</h4>
+            <h4 class="mb-0">Songs</h4>
           </div>
           <div v-if="$parent.searchResults.songs.length" class="row">
             <song :song="song" v-for="song in $parent.searchResults.songs" :key="song.name"></song>
           </div>
           <template v-else>
-            <span>No tracks found</span>
+            <span>No songs found</span>
           </template>
         </div>
       </div>

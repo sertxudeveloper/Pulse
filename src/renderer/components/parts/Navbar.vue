@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand text-center mr-0 h-100 py-2" href="#">
-      <i class="fas fa-headphones"></i>
+    <a class="nalign-items-center d-flex h-100 justify-content-center mr-0 navbar-brand py-1" href="#">
+      <img :src="logoRoute" alt="Pulse" class="h-100">
     </a>
     <div class="d-flex h-100 w-100">
       <input class="form-control form-control-dark w-100 h-100" type="text" placeholder="Search" v-model="search">
@@ -20,6 +20,7 @@
 
 <script>
   const ipc = require('electron').ipcRenderer
+  const path = require('path')
 
   export default {
     data: function () {
@@ -28,13 +29,18 @@
         isTyping: null
       }
     },
+    computed: {
+      logoRoute() {
+        return path.join(__static, '/logo.png')
+      }
+    },
     watch: {
       search: function () {
         clearTimeout(this.isTyping)
         this.isTyping = setTimeout(() => {
           if (!this.search || this.search.trim().length === 0) {
             this.search = ''
-            this.$router.push({name: 'populars-page'})
+            this.$router.push({name: 'home-page'})
             return null
           }
           ipc.send('search', this.search)

@@ -24,7 +24,9 @@
   import AsideNav from './components/parts/AsideNav'
   import Player from './components/parts/Player'
   import DropArea from './components/parts/DropArea'
+
   const ipc = require('electron').ipcRenderer
+  const win = require('electron').remote.getCurrentWindow()
 
   export default {
     components: {Navbar, AsideNav, Player, DropArea},
@@ -47,23 +49,80 @@
           muted: false,
           volume: 1.0,
           shuffle: false,
-          repeat: 0 // 0 No repeat | 1 Repeat all | 2 Repeat one
+          repeat: 0, /** 0 No repeat | 1 Repeat all | 2 Repeat one */
+          songsPlayed: 0
         },
       }
     },
     methods: {
       clearPlayer () {
         this.playlist = []
+        this.original = []
         this.currentSong = {title: '', artist: '', album: '', picture: '', route: ''}
         this.status.playing = false
+        this.$refs.audio.pause()
         ipc.send('playing-status', {remove: true})
       },
+      nextSong (index = 1) {
+        if (index === 0) return this.playOrPause()
+
+        if (this.status.repeat === 2) {
+          this.$refs.audio.currentTime = 0
+          return this.playOrPause('play')
+        }
+
+        ++this.status.songsPlayed
+
+        if (this.status.songsPlayed === this.playlist.length) {
+          this.status.songsPlayed = 0
+          if (this.status.repeat === 0) return this.clearPlayer()
+          /** if (this.status.repeat === 1) continue executing the following code, the repeat all is the main mode*/
+        }
+
+        /** Change current queue */
+        const skippedSongs = this.playlist.splice(0, index)
+        for (let i = 0; i < skippedSongs.length; i++) this.playlist.push(skippedSongs[i])
+
+        /** Change original queue */
+        const skippedOriginalSongs = this.original.splice(0, index)
+        for (let i = 0; i < skippedOriginalSongs.length; i++) this.original.push(skippedOriginalSongs[i])
+        this.setSong(this.playlist[0])
+      },
+      previousSong () {
+        --this.status.songsPlayed
+
+        /** Change current queue */
+        const skippedSongs = this.playlist.splice(-1, -1)
+        for (let i = 0; i < skippedSongs.length; i++) this.playlist.unshift(skippedSongs[i])
+
+        /** Change original queue */
+        const skippedOriginalSongs = this.original.splice(-1, -1)
+        for (let i = 0; i < skippedOriginalSongs.length; i++) this.original.unshift(skippedOriginalSongs[i])
+        this.setSong(this.playlist[0])
+      },
+      playOrPause (action) {
+        if (!this.$refs.audio.duration) return null
+        if (!action) {
+          (!this.status.playing) ? this.$refs.audio.play() : this.$refs.audio.pause()
+        } else {
+          (action === 'play') ? this.$refs.audio.play() : this.$refs.audio.pause()
+        }
+        this.status.playing = !this.$refs.audio.paused
+        ipc.send('playing-status',
+          {shuffle: this.status.shuffle, repeat: this.status.repeat, playing: this.status.playing})
+        clearInterval(this.status.interval)
+        if (this.status.playing) this.updateTime()
+      },
       playSong (song) {
-        this.addToPlaylist(song, true)
+        if (this.currentSong.id === song.id) {
+          this.playOrPause()
+        } else {
+          this.clearPlayer()
+          this.addToPlaylist(song)
+        }
       },
       setSong (song) {
         this.currentSong = song
-        console.log('setSong', this.currentSong)
         this.$refs.audio.oncanplay = () => {
           this.status.duration.original = this.$refs.audio.duration
           let minutes = Math.floor(this.$refs.audio.duration / 60)
@@ -71,69 +130,67 @@
           this.status.duration.minutes = this.setLeading(minutes)
           this.status.duration.seconds = this.setLeading(Math.floor(seconds))
           this.playOrPause('play')
+          this.sendNotification()
+          this.$refs.audio.oncanplay = null
         }
-      },
-      nextSong () {
-        let index = this.playlist.indexOf(this.currentSong)
-        let nextSong = null
-        if (index >= 0 && index < this.playlist.length - 1) nextSong = this.playlist[index + 1]
-        console.log('nextSong', nextSong)
-        if (!nextSong) {
-          this.clearPlayer()
-          return null
-        }
-        this.setSong(nextSong, true)
-      },
-      previousSong () {
-        console.log('previousSong')
-        let index = this.playlist.indexOf(this.currentSong)
-        let previousSong = null
-        if (index > 0 && index <= this.playlist.length - 1) previousSong = this.playlist[index - 1]
-        if (!previousSong) return null
-        this.setSong(previousSong, true)
       },
       addToPlaylist (song, immediate = false) {
-        console.log('addToPlaylist', song)
-        if (this.currentSong === song) return this.playOrPause()
-        if(!this.currentSong.title || immediate) this.setSong(song)
+        if (!this.currentSong.title || immediate) this.setSong(song)
         this.playlist.push(song)
+        this.original.push(song)
       },
       removeFromPlaylist (index, song) {
         if (song === this.currentSong) this.nextSong()
         this.playlist.splice(index, 1)
-      },
-      playOrPause (action) {
-        if (!this.$refs.audio.duration) return null
-        if (!action) {
-          if (!this.status.playing) {
-            this.$refs.audio.play()
-          } else {
-            this.$refs.audio.pause()
-          }
-        } else {
-          if (action === 'play') {
-            this.$refs.audio.play()
-          } else {
-            this.$refs.audio.pause()
-          }
-        }
-        this.status.playing = !this.$refs.audio.paused
-        ipc.send('playing-status', {shuffle: this.status.shuffle, repeat: this.status.repeat, playing: this.status.playing})
-        clearInterval(this.status.interval)
-        if (this.status.playing) this.updateTime()
+        this.original.splice(index, 1)
+        if (!this.playlist.length) this.clearPlayer()
       },
       shuffle () {
-        console.log('shuffle')
         this.status.shuffle = !this.status.shuffle
-        ipc.send('playing-status', {shuffle: this.status.shuffle, repeat: this.status.repeat, playing: this.status.playing})
+        ipc.send('playing-status',
+          {shuffle: this.status.shuffle, repeat: this.status.repeat, playing: this.status.playing})
+
+        if (this.status.shuffle) {
+          /** Desordenar canciones sin tocar la activa */
+          const actualSongObj = this.playlist.splice(0, 1)
+          this.playlist = this._shuffle(this.playlist)
+          this.playlist.unshift(actualSongObj[0])
+          this.status.songsPlayed = 0
+        } else {
+          /** Ordenar las canciones sin tocar la activa */
+          const actualSongObj = this.playlist.splice(0, 1)
+          this.playlist.splice(0, this.playlist.length)
+          this.playlist.push(actualSongObj[0])
+          for (let i = 0; i < this.original.length; i++) {
+            if (this.original[i].id !== actualSongObj[0].id) {
+              this.playlist.push(this.original[i])
+            }
+          }
+        }
+      },
+      _shuffle (a) {
+        let x, t, r = new Uint32Array(1)
+        for (let i = 0, c = a.length - 1, m = a.length; i < c; i++, m--) {
+          crypto.getRandomValues(r)
+          x = Math.floor(r / 65536 / 65536 * m) + i
+          t = a [i], a [i] = a [x], a [x] = t
+        }
+
+        return a
       },
       repeat () {
         this.status.repeat = (this.status.repeat === 2) ? 0 : ++this.status.repeat
-        console.log('repeat', this.status.repeat)
-        ipc.send('playing-status', {shuffle: this.status.shuffle, repeat: this.status.repeat, playing: this.status.playing})
+        ipc.send('playing-status',
+          {shuffle: this.status.shuffle, repeat: this.status.repeat, playing: this.status.playing})
       },
-      muteOrUnmute () {
-        this.status.muted = !this.status.muted
+      muteOrUnmute (action) {
+        if (!action) {
+          this.status.muted = !this.status.muted
+        } else {
+          if (action !== 'mute' && action !== 'unmute') return null
+          this.status.muted = (action === 'mute')
+        }
+
         this.$refs.audio.muted = this.status.muted
       },
       seek (event) {
@@ -142,29 +199,35 @@
       endedSong () {
         clearInterval(this.status.interval)
         this.status.playing = false
+        if (this.currentSong._id) ipc.send('history', {method: 'add', _id: this.currentSong._id})
         this.nextSong()
       },
       updateTime () {
         this.status.interval = setInterval(function () {
-          // console.log('interval')
-          if (this.status.currentTime.original === this.status.duration.original) this.endedSong()
           this.status.currentTime.original = this.$refs.audio.currentTime
+          if (this.status.currentTime.original === this.status.duration.original) this.endedSong()
           let minutes = Math.floor(this.$refs.audio.currentTime / 60)
           let seconds = this.$refs.audio.currentTime - minutes * 60
           this.status.currentTime.minutes = this.setLeading(minutes)
           this.status.currentTime.seconds = this.setLeading(Math.floor(seconds))
-        }.bind(this), 300)
+        }.bind(this), 100)
       },
       setLeading (value) {
         return (value < 10 ? '0' : '') + value
+      },
+      sendNotification () {
+        /** Chrome Notification **/
+        const notification = new Notification('► ' + this.currentSong.title,
+          {icon: this.currentSong.picture, body: this.currentSong.album.name, tag: 'reproduciendo', renotify: true})
+
+        notification.onclick = () => win.focus()
+        notification.onclose = () => window.close.bind(notification)
+        setTimeout(() => notification.close(), 7000)
       }
     },
     created () {
       $('img').on('dragstart', (event) => event.preventDefault())
-      $('main').on('scroll', () =>  {
-        console.log('scrolling')
-        $('.dropdown-toggle').dropdown('hide')
-      })
+      $('main').on('scroll', () => $('.dropdown-toggle').dropdown('hide'))
 
       window.onkeydown = (e) => {
         if (e.target !== document.body) return null
@@ -180,14 +243,10 @@
       ipc.on('player-clear', () => this.clearPlayer())
       ipc.on('player-shuffle', () => this.shuffle())
       ipc.on('player-repeat', () => this.repeat())
-      ipc.on('add-songs-playlist', (event, response) => {
-        response.forEach((song) => {
-          this.addToPlaylist(song)
-        })
-      })
+      ipc.on('add-songs-playlist', (event, response) => response.forEach((song) => this.addToPlaylist(song)))
     },
     watch: {
-      'status.volume': function (value) {
+      'status.volume': function () {
         this.$refs.audio.volume = this.status.volume
       },
       'currentSong.route': function (value) {
@@ -195,7 +254,7 @@
       }
     },
     computed: {
-      audioSource: function (value) {
+      audioSource: function () {
         return this.currentSong.route.replace('#', '%23')
       }
     }

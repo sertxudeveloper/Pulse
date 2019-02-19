@@ -9,6 +9,9 @@
           <i class="fas fa-play" v-else></i>
         </div>
       </div>
+      <div v-if="song.preview" class="position-absolute preview">
+        <span class="badge badge-secondary">Preview</span>
+      </div>
       <img :src="song.picture" :alt="song.title" width="100%" height="100%" class="d-block">
     </div>
     <div class="text-muted details pt-1 position-relative">
@@ -25,10 +28,13 @@
 
       <div class="dropdown-menu options-container" :aria-labelledby="'options_'+song.title">
         <ul class="list-unstyled mb-0 py-2">
-          <li class="py-1 px-3"><i class="fas fa-list text-muted pr-3"></i>Add to playlist</li>
-          <li class="py-1 px-3"><i class="fas fa-search text-muted pr-3"></i>Get Recommendations</li>
-          <li class="py-1 px-3"><i class="fas fa-minus-circle text-muted pr-3"></i>Remove</li>
-          <li class="py-1 px-3"><i class="fas fa-pencil-alt text-muted pr-3"></i>Edit</li>
+          <li class="py-1 px-3" v-on:click="$root.$refs.app.addToPlaylist(song)">
+            <i class="fas fa-plus text-muted pr-3"></i>Add to queue
+          </li>
+          <!--<li class="py-1 px-3"><i class="fas fa-list text-muted pr-3"></i>Add to playlist</li>-->
+          <!--<li class="py-1 px-3"><i class="fas fa-search text-muted pr-3"></i>Get Recommendations</li>-->
+          <!--<li class="py-1 px-3"><i class="fas fa-trash text-muted pr-3"></i>Remove</li>-->
+          <!--<li class="py-1 px-3"><i class="fas fa-pencil-alt text-muted pr-3"></i>Edit</li>-->
         </ul>
       </div>
       <div ref="options" class=" position-absolute">
@@ -97,5 +103,9 @@
 
   .poster:hover, .poster.active {
     box-shadow: none;
+  }
+
+  .poster .preview {
+    right: 5px;
   }
 </style>

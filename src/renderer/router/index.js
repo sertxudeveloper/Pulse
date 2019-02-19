@@ -8,13 +8,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'populars-page',
-      component: require('@/components/pages/Populars').default
+      name: 'home-page',
+      component: require('@/components/pages/Home').default
     },
     {
-      path: '/tracks',
-      name: 'tracks-page',
-      component: require('@/components/pages/Tracks').default
+      path: '/songs',
+      name: 'songs-page',
+      component: require('@/components/pages/Songs').default
     },
     {
       path: '/albums',

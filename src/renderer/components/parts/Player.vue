@@ -8,10 +8,8 @@
         </button>
         <button type="button" class="plyr__control" aria-label="Play, {title}" data-plyr="play"
                 v-on:click="$parent.playOrPause()">
-          <!--<svg v-if="status.playing" role="presentation"><use xlink:href="#plyr-pause"></use></svg>-->
           <i class="fas fa-pause" v-if="status.playing"></i>
           <i class="fas fa-play" v-else></i>
-          <!--<svg v-else role="presentation"><use xlink:href="#plyr-play"></use></svg>-->
           <span v-if="status.playing" class="plyr__tooltip" role="tooltip">Pause</span>
           <span v-else class="plyr__tooltip" role="tooltip">Play</span>
         </button>
@@ -28,6 +26,7 @@
       </div>
       <div class="plyr__progress p-0" v-if="currentSong.title">
         <input data-plyr="seek" type="range" min="0" max="100" step="0.01" v-on:input="$parent.seek($event)"
+               v-on:mouseup="$parent.muteOrUnmute('unmute')" v-on:mousedown="$parent.muteOrUnmute('mute')"
                :value="status.currentTime.original / status.duration.original * 100" aria-label="Seek"
                :style="'--value:' + (status.currentTime.original / status.duration.original * 100) + '%'">
         <progress class="plyr__progress__buffer" min="0" max="100" value="0">% buffered</progress>
@@ -42,7 +41,7 @@
         </div>
       </div>
       <div class="plyr__details col-12 d-flex flex-column" v-else>
-        <span class="text-muted">Selecciona una canción</span>
+        <span class="text-muted">Select a song</span>
       </div>
       <div class="align-items-center col-3 d-flex justify-content-between" v-if="currentSong.title">
         <div class="btn-group dropup">
@@ -55,7 +54,7 @@
                aria-labelledby="playlistDropup">
             <ul class="list-group list-group-flush">
               <li class="bg-transparent list-group-item text-light d-flex" v-for="(song, index) in $parent.playlist">
-                <div class="col-2 position-relative px-0" v-on:click="$parent.playSong(song, true)">
+                <div class="col-2 position-relative px-0" v-on:click="$parent.nextSong(index)">
                   <div class="position-absolute active w-100 h-100 d-flex justify-content-center align-items-center"
                        v-if="song.id === $parent.currentSong.id">
                     <i class="fas fa-pause" v-if="song.id === $parent.currentSong.id && $parent.status.playing"></i>
@@ -97,7 +96,7 @@
                 <path style=" stroke:none;fill-rule:nonzero;fill:#ff3348;fill-opacity:1;" d="M 32.894531 6.578125 L 32.894531 11.511719 L 13.15625 11.511719 C 7.730469 11.511719 3.289063 15.953125 3.289063 21.382813 C 3.28125 21.972656 3.589844 22.523438 4.105469 22.828125 C 4.621094 23.121094 5.25 23.121094 5.761719 22.828125 C 6.277344 22.523438 6.585938 21.972656 6.578125 21.382813 C 6.578125 17.730469 9.507813 14.800781 13.15625 14.800781 L 32.894531 14.800781 L 32.894531 19.738281 L 44.40625 13.15625 Z M 44.382813 26.289063 C 43.476563 26.308594 42.75 27.054688 42.761719 27.960938 C 42.761719 31.609375 39.832031 34.539063 36.183594 34.539063 L 16.449219 34.539063 L 16.449219 29.605469 L 4.933594 36.183594 L 16.449219 42.761719 L 16.449219 37.828125 L 36.183594 37.828125 C 41.613281 37.828125 46.050781 33.390625 46.050781 27.960938 C 46.058594 27.515625 45.886719 27.085938 45.570313 26.773438 C 45.257813 26.457031 44.824219 26.285156 44.382813 26.289063 Z "/>
             </svg>
             <svg v-else-if="status.repeat === 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50pt" height="50pt" viewBox="0 0 50 50" version="1.1">
-              <path style=" stroke:none;fill-rule:nonzero;fill:#ff3348;fill-opacity:1;" d="M 24.671875 6.578125 L 24.671875 11.511719 L 13.15625 11.511719 C 7.730469 11.511719 3.289063 15.953125 3.289063 21.382813 C 3.28125 21.972656 3.589844 22.523438 4.105469 22.828125 C 4.621094 23.121094 5.25 23.121094 5.761719 22.828125 C 6.277344 22.523438 6.585938 21.972656 6.578125 21.382813 C 6.578125 17.730469 9.507813 14.800781 13.15625 14.800781 L 24.671875 14.800781 L 24.671875 19.738281 L 36.183594 13.15625 Z M 42.808594 6.988281 L 39.570313 9.199219 L 39.570313 11.988281 L 42.640625 9.914063 L 42.808594 9.914063 L 42.808594 19.738281 L 46.050781 19.738281 L 46.050781 6.988281 Z M 44.382813 26.289063 C 43.476563 26.308594 42.75 27.054688 42.761719 27.960938 C 42.761719 31.609375 39.832031 34.539063 36.183594 34.539063 L 16.449219 34.539063 L 16.449219 29.605469 L 4.933594 36.183594 L 16.449219 42.761719 L 16.449219 37.828125 L 36.183594 37.828125 C 41.613281 37.828125 46.050781 33.390625 46.050781 27.960938 C 46.058594 27.515625 45.886719 27.085938 45.570313 26.773438 C 45.257813 26.457031 44.824219 26.285156 44.382813 26.289063 Z "/>
+              <path style="stroke:none;fill-rule:nonzero;fill:#ff3348;fill-opacity:1;" d="M 24.671875 6.578125 L 24.671875 11.511719 L 13.15625 11.511719 C 7.730469 11.511719 3.289063 15.953125 3.289063 21.382813 C 3.28125 21.972656 3.589844 22.523438 4.105469 22.828125 C 4.621094 23.121094 5.25 23.121094 5.761719 22.828125 C 6.277344 22.523438 6.585938 21.972656 6.578125 21.382813 C 6.578125 17.730469 9.507813 14.800781 13.15625 14.800781 L 24.671875 14.800781 L 24.671875 19.738281 L 36.183594 13.15625 Z M 42.808594 6.988281 L 39.570313 9.199219 L 39.570313 11.988281 L 42.640625 9.914063 L 42.808594 9.914063 L 42.808594 19.738281 L 46.050781 19.738281 L 46.050781 6.988281 Z M 44.382813 26.289063 C 43.476563 26.308594 42.75 27.054688 42.761719 27.960938 C 42.761719 31.609375 39.832031 34.539063 36.183594 34.539063 L 16.449219 34.539063 L 16.449219 29.605469 L 4.933594 36.183594 L 16.449219 42.761719 L 16.449219 37.828125 L 36.183594 37.828125 C 41.613281 37.828125 46.050781 33.390625 46.050781 27.960938 C 46.058594 27.515625 45.886719 27.085938 45.570313 26.773438 C 45.257813 26.457031 44.824219 26.285156 44.382813 26.289063 Z "/>
             </svg>
             <span class="plyr__tooltip" role="tooltip">Repeat</span>
           </button>

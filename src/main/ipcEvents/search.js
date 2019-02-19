@@ -1,12 +1,12 @@
 const ipc = require('electron').ipcMain
 
-const Artist = require('../collections/artist').default
+const Artist = require('../collections/artistCollection').default
 const ArtistCollection = new Artist()
 
-const Album = require('../collections/album').default
+const Album = require('../collections/albumCollection').default
 const AlbumCollection = new Album()
 
-const Song = require('../collections/song').default
+const Song = require('../collections/songCollection').default
 const SongCollection = new Song()
 
 export default () => {

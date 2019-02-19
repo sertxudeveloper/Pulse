@@ -9,7 +9,7 @@
       </div>
       <hr class="border-light">
       <div class="text-center">
-        <button class="btn btn-radius btn-outline-light" v-on:click="playAllSongs()">Play all</button>
+        <button class="btn btn-radius btn-outline-light" v-on:click="playAllSongs()">Add to queue</button>
       </div>
     </div>
     <div class="col-9">
@@ -53,19 +53,17 @@
         ipc.send('artists', {method: 'show', where: {name: this.$route.params.name}})
       },
       requestAlbums () {
-        ipc.send('artist-albums', {method: 'paginate', page: this.page, pageSize: this.pageSize, _id: this.artist._id})
+        ipc.send('artists', {method: 'albums', page: this.page, pageSize: this.pageSize, where: {name: this.$route.params.name}})
       },
       playAllSongs () {
-        ipc.send('play-all', {method: 'artist', _id: this.artist._id})
+        ipc.send('artists', {method: 'playAll', where: {name: this.$route.params.name}})
       }
     },
     created () {
       this.requestArtist()
-      ipc.on('artists-show', (event, response) => {
-        this.artist = response
-        this.requestAlbums()
-      })
-      ipc.on('artist-albums-paginate', (event, response) => {
+      this.requestAlbums()
+      ipc.on('artists-show', (event, response) => this.artist = response)
+      ipc.on('artist-albums', (event, response) => {
         this.albums = response.data
         this.count = response.count
       })
