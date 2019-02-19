@@ -13,16 +13,29 @@
         <span class="text-light">{{artist.name}}</span>
       </div>
       <div class="position-absolute options px-2"
-           role="button" :id="'options_'+artist.title" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           role="button" :id="'options_'+artist.title" data-toggle="dropdown" aria-haspopup="true"
+           aria-expanded="false">
         <i class="fas fa-ellipsis-v"></i>
       </div>
 
       <div class="dropdown-menu options-container" :aria-labelledby="'options_'+artist.title">
         <ul class="list-unstyled mb-0 py-2">
-          <li class="py-1 px-3"><i class="fas fa-list text-muted pr-3"></i>Add to playlist</li>
-          <li class="py-1 px-3"><i class="fas fa-search text-muted pr-3"></i>Get Recommendations</li>
-          <li class="py-1 px-3"><i class="fas fa-minus-circle text-muted pr-3"></i>Remove</li>
-          <li class="py-1 px-3"><i class="fas fa-pencil-alt text-muted pr-3"></i>Edit</li>
+          <li class="py-1 px-3">
+            <i class="fas fa-list text-muted pr-3"></i>
+            Add to playlist
+          </li>
+          <li class="py-1 px-3">
+            <i class="fas fa-search text-muted pr-3"></i>
+            Get Recommendations
+          </li>
+          <li class="py-1 px-3">
+            <i class="fas fa-minus-circle text-muted pr-3"></i>
+            Remove
+          </li>
+          <li class="py-1 px-3" v-on:click="$parent.$refs.edit_artist_modal.openModal(artist)">
+            <i class="fas fa-pencil-alt text-muted pr-3"></i>
+            Edit
+          </li>
         </ul>
       </div>
     </div>

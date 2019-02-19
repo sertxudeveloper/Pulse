@@ -3,13 +3,13 @@
     <ul class="nav flex-column text-center">
       <li class="nav-item py-3">
         <router-link to="/" class="nav-link text-light active" href="#" data-toggle="tooltip" data-placement="right"
-          title="Populars">
+          title="Home">
           <i class="fas fa-star"></i>
         </router-link>
       </li>
       <li class="nav-item py-3">
-        <router-link to="/tracks" class="nav-link text-light" href="#" data-toggle="tooltip" data-placement="right"
-          title="Tracks">
+        <router-link to="/songs" class="nav-link text-light" href="#" data-toggle="tooltip" data-placement="right"
+          title="Songs">
           <i class="fas fa-music"></i>
         </router-link>
       </li>
@@ -34,5 +34,5 @@ export default {}
 </script>
 
 <style>
-  
+
 </style>

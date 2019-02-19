@@ -14,6 +14,7 @@
                     :offset="6" v-on:changePage="changePage"></pagination>
       </div>
     </div>
+    <edit-artist-modal ref="edit_artist_modal"></edit-artist-modal>
   </div>
 </template>
 
@@ -21,9 +22,10 @@
   const ipc = require('electron').ipcRenderer
   import Artist from '../parts/Artist'
   import Pagination from '../parts/Pagination'
+  import EditArtistModal from '../modals/EditArtistModal'
 
   export default {
-    components: {Artist, Pagination},
+    components: {Artist, Pagination, EditArtistModal},
     data () {
       return {
         artists: [],

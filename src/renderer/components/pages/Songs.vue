@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="border-bottom d-flex justify-content-between mb-2 pb-2">
-      <h3 class="mb-0">Tracks</h3>
-      <span class="align-self-end d-flex">{{count}} tracks</span>
+      <h3 class="mb-0">Songs</h3>
+      <button class="btn btn-radius btn-outline-light" v-on:click="playAllSongs()">Play all</button>
+      <span class="align-self-end d-flex">{{count}} songs</span>
     </div>
     <div class="row">
       <song :song="song" v-for="song in songs" :key="song.route"></song>
@@ -35,15 +36,18 @@
     methods: {
       changePage(page) {
         this.page = page
-        this.requestTracks()
+        this.requestSongs()
       },
-      requestTracks () {
-        ipc.send('tracks', {method: 'paginate', page: this.page, pageSize: this.pageSize})
+      requestSongs () {
+        ipc.send('songs', {method: 'paginate', page: this.page, pageSize: this.pageSize})
+      },
+      playAllSongs () {
+        ipc.send('songs', {method: 'playAll'})
       }
     },
     created () {
-      this.requestTracks()
-      ipc.on('tracks-paginate', (event, response) => {
+      this.requestSongs()
+      ipc.on('songs-paginate', (event, response) => {
         this.songs = response.data
         this.count = response.count
       })

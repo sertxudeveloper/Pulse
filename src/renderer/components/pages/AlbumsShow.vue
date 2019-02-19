@@ -20,11 +20,11 @@
       </div>
       <hr class="border-light">
       <div class="text-center">
-        <button class="btn btn-radius btn-outline-light" v-on:click="playAllSongs()">Play all</button>
+        <button class="btn btn-radius btn-outline-light" v-on:click="playAllSongs()">Add to queue</button>
       </div>
     </div>
     <div class="col-9">
-      <h4 class="border-bottom pb-2">Tracks</h4>
+      <h4 class="border-bottom pb-2">Songs</h4>
       <div class="row">
         <song :song="song" v-for="song in songs" :key="song.title"></song>
       </div>
@@ -58,28 +58,23 @@
     methods: {
       changePage (page) {
         this.page = page
-        this.requestTracks()
+        this.requestSongs()
       },
       requestAlbum () {
         ipc.send('albums', {method: 'show', where: {name: this.$route.params.name}})
       },
-      requestTracks () {
-        ipc.send('album-tracks', {
-          method: 'paginate',
-          page: this.page, pageSize: this.pageSize, where: {album: this.album._id}
-        })
+      requestSongs () {
+        ipc.send('albums', {method: 'songs', page: this.page, pageSize: this.pageSize, where: {name: this.$route.params.name}})
       },
       playAllSongs () {
-        ipc.send('play-all', {method: 'album', _id: this.artist._id})
+        ipc.send('albums', {method: 'playAll', where: {name: this.$route.params.name}})
       }
     },
     created () {
       this.requestAlbum()
-      ipc.on('albums-show', (event, response) => {
-        this.album = response
-        this.requestTracks()
-      })
-      ipc.on('album-tracks-pagination', (event, response) => {
+      this.requestSongs()
+      ipc.on('albums-show', (event, response) => this.album = response)
+      ipc.on('albums-songs', (event, response) => {
         this.songs = response.data
         this.count = response.count
       })

@@ -20,7 +20,7 @@
     },
     methods: {
       processDrop (route) {
-        ipc.send('tracks', {method: 'process', data: {route}})
+        ipc.send('songs', {method: 'process', data: {route}})
       }
     },
     created () {
@@ -56,7 +56,7 @@
         e.stopPropagation()
       })
 
-      ipc.on('tracks-processed', (event, response) => {
+      ipc.on('songs-processed', (event, response) => {
         new Noty(response).show()
       })
     }
