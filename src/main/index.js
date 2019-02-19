@@ -1,6 +1,7 @@
 const {app, BrowserWindow, nativeImage, ipcMain, globalShortcut} = require('electron')
 const path = require('path')
 const Mongo = require('./database').default
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -113,6 +114,8 @@ function createWindow () {
 
   require('./ipcEvents').default()
 }
+
+app.setAppUserModelId('com.sertxudeveloper.pulse')
 
 app.on('ready', connectDatabase)
 
