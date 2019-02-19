@@ -1,6 +1,6 @@
 <template>
-  <div class="col-3 col-md-2 my-2" v-on:click="goToAlbum(album.name)">
-    <div class="poster position-relative">
+  <div class="col-3 col-md-2 my-2">
+    <div class="poster position-relative" v-on:click="goToAlbum(album.name)">
       <div class="h-100 hover position-absolute w-100">
         <div class="w-50 h-50 d-flex justify-content-center align-items-center">
           <i class="fas fa-folder-open"></i>
