@@ -45,7 +45,7 @@
       </div>
       <div class="align-items-center col-3 d-flex justify-content-between" v-if="currentSong.title">
         <div class="btn-group dropup">
-          <a class="text-light dropdown-toggle px-5 py-3" href="#" role="button" id="playlistDropup"
+          <a class="text-light dropdown-toggle px-5 py-3" role="button" id="playlistDropup"
              data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false" v-on:click="togglePlaylist($event)">
             <i class="fas fa-list"></i>
@@ -53,6 +53,9 @@
           <div class="dropdown-menu playlist dropdown-menu-right bg-dark overflow-y-auto overflow-x-hidden"
                aria-labelledby="playlistDropup">
             <ul class="list-group list-group-flush">
+              <li class="bg-transparent d-flex justify-content-end list-group-item pt-1 text-light" v-on:click="$parent.clearPlayer()">
+                  <i class="fa-trash fas"></i>
+              </li>
               <li class="bg-transparent list-group-item text-light d-flex" v-for="(song, index) in $parent.playlist">
                 <div class="col-2 position-relative px-0" v-on:click="$parent.nextSong(index)">
                   <div class="position-absolute active w-100 h-100 d-flex justify-content-center align-items-center"

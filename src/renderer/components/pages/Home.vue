@@ -3,7 +3,12 @@
     <div class="border-bottom d-flex mb-2 pb-2">
       <h3 class="mb-0">Last 7 days most listened</h3>
     </div>
-    <div class="row">
+    <div class="row" v-if="!most_listened_week.length">
+      <div class="col-12 text-center">
+        Data not available
+      </div>
+    </div>
+    <div class="row" v-else>
       <song :song="song" v-for="(song, key) in most_listened_week" :key="key"></song>
     </div>
 
@@ -11,14 +16,24 @@
       <h3 class="mb-0">Last 7 days recommendation</h3>
       <span class="align-self-end d-flex" v-on:click="clearCacheRecommendedWeek">Refresh</span>
     </div>
-    <div class="row">
+    <div class="row" v-if="!recommended_week.length">
+      <div class="col-12 text-center">
+        Recommendations not available
+      </div>
+    </div>
+    <div class="row" v-else>
       <song :song="song" v-for="(song, key) in recommended_week" :key="key"></song>
     </div>
 
     <div class="border-bottom d-flex mb-2 mt-4 pb-2">
       <h3 class="mb-0">Last month most listened</h3>
     </div>
-    <div class="row">
+    <div class="row" v-if="!most_listened_month.length">
+      <div class="col-12 text-center">
+        Data not available
+      </div>
+    </div>
+    <div class="row" v-else>
       <song :song="song" v-for="(song, key) in most_listened_month" :key="key"></song>
     </div>
 
@@ -26,14 +41,24 @@
       <h3 class="mb-0">Last month recommendation</h3>
       <span class="align-self-end d-flex" v-on:click="clearCacheRecommendedMonth">Refresh</span>
     </div>
-    <div class="row">
+    <div class="row" v-if="!recommended_month.length">
+      <div class="col-12 text-center">
+        Recommendations not available
+      </div>
+    </div>
+    <div class="row" v-else>
       <song :song="song" v-for="(song, key) in recommended_month" :key="key"></song>
     </div>
 
     <div class="border-bottom d-flex mb-2 mt-4 pb-2">
       <h3 class="mb-0">Last listened</h3>
     </div>
-    <div class="row">
+    <div class="row" v-if="!last_listened.length">
+      <div class="col-12 text-center">
+        Data not available
+      </div>
+    </div>
+    <div class="row" v-else>
       <song :song="song" v-for="(song, key) in last_listened" :key="key"></song>
     </div>
   </div>

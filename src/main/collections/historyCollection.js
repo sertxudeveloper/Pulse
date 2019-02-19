@@ -57,6 +57,7 @@ class HistoryCollection extends Base {
     let response = []
     for (let el in listened) {
       let fount = await SpotifyProvider.search(listened[el].title + ' ' + listened[el].artists[0].name, 'tracks')
+      if (!fount) continue
       let uri = fount.split(':')[2]
 
       let recommendations = await SpotifyProvider.getRecommendation(uri, 'tracks')

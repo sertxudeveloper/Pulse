@@ -16,6 +16,7 @@ class Spotify {
         response = await axios({method: 'get', url: baseURL + query + '&type=track&market=US&limit=1', headers})
           .then(res => res.data)
           .catch(err => console.error(err.response))
+        if (!response.tracks.items[0]) return null
         return response.tracks.items[0].uri
         break
 
@@ -23,6 +24,7 @@ class Spotify {
         response = await axios({method: 'get', url: baseURL + query + '&type=artist&market=US&limit=1', headers})
           .then(res => res.data)
           .catch(err => console.error(err.response))
+        if (!response.artists.items[0]) return null
         return response.artists.items[0].uri
         break
     }

@@ -31,6 +31,7 @@ export default () => {
           response = cacheRecommendedWeek
         } else {
           response = await HistoryCollection.getRecommendedWeek()
+          if(!response) return null
           cacheRecommendedWeek = response
         }
         event.sender.send('history-recommendedWeek', response)
@@ -41,6 +42,7 @@ export default () => {
           response = cacheRecommendedMonth
         } else {
           response = await HistoryCollection.getRecommendedMonth()
+          if(!response) return null
           cacheRecommendedMonth = response
         }
         event.sender.send('history-recommendedMonth', response)
@@ -48,12 +50,14 @@ export default () => {
 
       case 'clearCacheRecommendedWeek':
         response = await HistoryCollection.getRecommendedWeek()
+        if(!response) return null
         cacheRecommendedWeek = response
         event.sender.send('history-recommendedWeek', response)
         break
 
       case 'clearCacheRecommendedMonth':
         response = await HistoryCollection.getRecommendedMonth()
+        if(!response) return null
         cacheRecommendedMonth = response
         event.sender.send('history-recommendedMonth', response)
         break
