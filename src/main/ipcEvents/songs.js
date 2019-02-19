@@ -4,7 +4,7 @@ const app = require('electron').app
 const process = require('child_process')
 const queue = require('async/queue')
 const path = require('path')
-const workerRoute = path.join(__dirname, '../../../dist/electron/workers/workers.js')
+const workerRoute = path.join(__dirname, '../../dist/electron/workers/workers.js')
 
 const Song = require('../collections/songCollection').default
 const SongCollection = new Song()
@@ -67,7 +67,7 @@ export default () => {
 
       case 'process':
         if (!request.data) return null
-
+        
         const taskQueue = queue((route, callback) => {
           let worker = process.fork(workerRoute, [route, app.getPath('userData')])
 
