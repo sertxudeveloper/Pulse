@@ -49,7 +49,10 @@ $ npm run build
 #### Additional information
 If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use ``node `` from the command prompt.
 
-If the error **Node Sass could not find a binding for your current environment** occurs, you should execute the command ``npm rebuild node-sass``
+If the error **Node Sass could not find a binding for your current environment** occurs, you should execute the command 
+```shell
+$ npm rebuild node-sass
+```
 <br>
 
 Contributing
