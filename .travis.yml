@@ -29,6 +29,8 @@ install:
 - source ~/.bashrc
 - npm install -g xvfb-maybe
 script:
+- npm i
+- npm rebuild node-sass
 - npm run build
 branches:
   only:
