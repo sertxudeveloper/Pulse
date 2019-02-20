@@ -1,5 +1,5 @@
 <p align="center">
-<img width="75%" src="./.github/pulse.png">
+<img width="65%" src="./.github/pulse.png">
 </p>
 <h3 align="center">A web-based music player</h3>
 
