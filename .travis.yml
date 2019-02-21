@@ -1,6 +1,6 @@
 osx_image: xcode8.3
 sudo: required
-dist: trusty
+dist: xenial
 language: c
 
 matrix:
@@ -21,6 +21,7 @@ addons:
     packages:
     - libgnome-keyring-dev
     - icnsutils
+    - snapd
 
 before_install:
 - mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v1.2.1/git-lfs-$([
@@ -29,10 +30,7 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils; fi
 
 install:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-  sudo apt update;
-  sudo apt install snapd;
-  sudo snap install snapcraft --classic; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo snap install snapcraft --classic; fi
 - nvm install node
 - curl -o- -L https://yarnpkg.com/install.sh | bash
 - source ~/.bashrc
