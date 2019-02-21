@@ -42,7 +42,7 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: "PRAjEog99J3nhPY0Cz49wAGMA2tNxXkW5aLf5yednXLzbmM0rWmUNpAxYWwDL/hBYrIoaq0sSNXba5k9FdyVjKRHQ44C9YcopijNO6W5suRCRxpurswkQ01B84tmRU9MIMRMyl2qjup6moPRaIG1+75FONTMGcrFxkfUbV2n/SE6KrlJ7VC0SHAEnxrBRWZ1zLlJS3c8pDuTZ0Al7LJ/9L6UBwjiZ3ZegoscME0VqO2s6M3LTJGkTAODP3sk1YnijBvBqnDMGxnA4blwFeV79LrLAtYOJbPoQvL7x/2ZA/qwgp6KwMjTQvAte9HGDFKvA71Pwgt5ag0L1Vogz6PJSS3n20ZVx9n0gbQiahpDa/r3lBKvguo9B27I9NZ3X+nLISOz4R6qSAqwUpgu+C8xm5R2oKUgpCgVkdVglnr2jyX2W7ulHHvG0/E836LrDqZzu2ogwKaPMWG9OWWVpraxZl82NyWI60qjwRaUfTHtW7ZDRIak2nKEzhwYiAFX7yZvHicWW5woeLtqhHDp/eZAwozrzNgRp9iuBSvqGLxgxqtxHEIMDDPQdmvtiSMPA6UqVczrmLh0t50elU5QAlydTaFyLWvzq9lbs3dLNUkreQEtnY8EFiheA/ZY8MRGJH6B0ct8MQ1u2xj4a8Zf4qbk5jrlggegL71wVY5VnKKUfTc="
+    secure: $GITHUB_TOKEN
   file_glob: true
   file:
     - "dist/*.*"
