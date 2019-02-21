@@ -30,7 +30,7 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils; fi
 
 install:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo snap install snapcraft --classic; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo snap install snapcraft --classic --candidate; fi
 - nvm install node
 - curl -o- -L https://yarnpkg.com/install.sh | bash
 - source ~/.bashrc
