@@ -9,6 +9,7 @@ matrix:
   - os: linux
     env: CC=clang CXX=clang++ npm_config_clang=1
     compiler: clang
+  - os: windows
 
 cache:
   directories:
@@ -36,8 +37,4 @@ install:
 - yarn
 
 script:
-- if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
-    yarn --link-duplicates --pure-lockfile && yarn build:all
-  else
-    yarn run build
-  fi
+- yarn run build:all
