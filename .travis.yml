@@ -29,7 +29,9 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils; fi
 
 install:
-- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y libopenjp2-tools snapcraft; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+  sudo apt-get install --no-install-recommends -y libopenjp2-tools &&
+  sudo apt-get install --no-install-recommends -y snapcraft; fi
 - nvm install node
 - curl -o- -L https://yarnpkg.com/install.sh | bash
 - source ~/.bashrc
