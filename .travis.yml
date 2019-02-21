@@ -2,35 +2,49 @@ osx_image: xcode8.3
 sudo: required
 dist: trusty
 language: c
+
 matrix:
   include:
   - os: osx
   - os: linux
     env: CC=clang CXX=clang++ npm_config_clang=1
     compiler: clang
+
 cache:
   directories:
   - node_modules
   - "$HOME/.electron"
   - "$HOME/.cache"
+
 addons:
   apt:
     packages:
     - libgnome-keyring-dev
     - icnsutils
+
 before_install:
 - mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v1.2.1/git-lfs-$([
   "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-1.2.1.tar.gz
   | tar -xz -C /tmp/git-lfs --strip-components 1 && /tmp/git-lfs/git-lfs pull
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils; fi
+
 install:
 - nvm install node
 - curl -o- -L https://yarnpkg.com/install.sh | bash
 - source ~/.bashrc
 - npm install -g xvfb-maybe
 - yarn
+
 script:
 - yarn run build
-branches:
-  only:
-  - master
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: "PLkbPBy18+M1eiMAj7U/1wuDgPFr810RMO2dfod7YHdkw1WzMhVPNAMGmLptHhbIYn/WF4NDo3JfLTluBAXi06PXUQnMsOhVm7UhDiA/u9h3ufl710+Poi5bpziHPtxHoYQK0UiYYpXzT+lFp/qQzWtLWPTD4RO/PbqSZ1pkZBfN5DpEldyxAsk4XpC74ZVp3XKUweQw+FS/pkOfeP5j8siqWEFYkembrDQ9fglxAWy7sQIf66DeHcqUyTaQZCslu/aUlWkJpJOoXG5/JogJJ7NPpaZGuaaleVYgbSi073w3Il42lM1ZAXwFlWTJ2o0Q9BOBPO5rBySkS2zaucuiim1QKt8fVO9kdHRfdj7W7smaeGvmlIfvnbEfPYBD0FiYyv1RKwPFj5yrWIsLmvGbOoK55QpWINyi2giDfnI67KEtDO9pZIBjat1eEEXWrn4sKx82gQ2xnR/hoBFQNfIcYJkCTXAEj0cfkVkOi7BudOeZ8BZ6gxlZGfGHW7jKNBVOQkkdenXBfhO1bsfrOAzpAAw0WblNX9My9VCPVNcJEJpPjTl6b1PiDHlibMPfpMcrO5paBficGv0mmrkAbXMa4EQb/NwneR+G+wIaQOQWsdEsI/rb1O03pwAhziBRyLK7y0BOkKALELYKUcU/cSpY/vxZFpk9bH5mAfDw+BpxJL0="
+  file_glob: true
+  file:
+    - "dist/*.*"
+  on:
+    tags: true
