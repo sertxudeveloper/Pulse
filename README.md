@@ -9,21 +9,15 @@
 
 [![GitHub issues](https://img.shields.io/github/issues/sertxudeveloper/Pulse.svg)](https://github.com/sertxudeveloper/Pulse/issues/) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/sertxudeveloper/Pulse.svg)](http://isitmaintained.com/project/sertxudeveloper/Pulse "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/sertxudeveloper/Pulse.svg)](http://isitmaintained.com/project/sertxudeveloper/Pulse "Percentage of issues still open")
 
-
-
-
-
 Basic Overview
 ------
 **Pulse** is a web-based music player so you'll be able to play all the songs on your hard drive like you're in the cloud, it's an open source project so you can adapt, extend overwrite and to your needs. It's connected to MongoDB to generate your own Big Data while you're listening to music.
-<br>
 
 Installation
 ------
 Before installing Pulse, you should know it requires a [MongoDB](https://www.mongodb.com/download-center/community) server with version 4.0 or above. The server should be at the address ``localhost:27017``, actually if you want to change this address you should fork this project and build your own executable.
 
 Once you've got MongoDB installed, you're able to install Pulse in your computer. To download it go to the [Releases](https://github.com/sertxudeveloper/Pulse/releases) section or click [here](https://github.com/sertxudeveloper/Pulse/archive/release.zip) to download the latest version available.
-<br>
 
 Clone, Run and Build
 ------
@@ -53,7 +47,6 @@ If the error **Node Sass could not find a binding for your current environment**
 ```shell
 $ npm rebuild node-sass
 ```
-<br>
 
 Contributing
 ------
