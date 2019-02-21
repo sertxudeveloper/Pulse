@@ -38,4 +38,4 @@ install:
 - yarn
 
 script:
-- yarn run build:all
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn run build; else yarn run build:all; fi
