@@ -32,7 +32,7 @@ install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
   sudo apt update;
   sudo apt install snapd;
-  sudo snap install snapcraft --classic; i
+  sudo snap install snapcraft --classic; fi
 - nvm install node
 - curl -o- -L https://yarnpkg.com/install.sh | bash
 - source ~/.bashrc
