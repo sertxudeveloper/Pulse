@@ -92,11 +92,11 @@
         --this.status.songsPlayed
 
         /** Change current queue */
-        const skippedSongs = this.playlist.splice(-1, -1)
+        const skippedSongs = this.playlist.splice(-1, 1)
         for (let i = 0; i < skippedSongs.length; i++) this.playlist.unshift(skippedSongs[i])
 
         /** Change original queue */
-        const skippedOriginalSongs = this.original.splice(-1, -1)
+        const skippedOriginalSongs = this.original.splice(-1, 1)
         for (let i = 0; i < skippedOriginalSongs.length; i++) this.original.unshift(skippedOriginalSongs[i])
         this.setSong(this.playlist[0])
       },
