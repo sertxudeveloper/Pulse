@@ -1,6 +1,6 @@
 {
   "name": "pulse",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Sertxu Developer <dev.sertxu@gmail.com>",
   "description": "A web based music using Electron, Vue, Axios, Express and MongoDB",
   "license": "MIT",
