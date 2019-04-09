@@ -13,7 +13,7 @@ class Spotify {
 
     switch (type) {
       case 'tracks':
-        response = await axios({method: 'get', url: baseURL + query + '&type=track&market=US&limit=1', headers})
+        response = await axios({method: 'get', url: baseURL + query.normalize('NFD').replace(/[\u0300-\u036f]/g, '') + '&type=track&market=US&limit=1', headers})
           .then(res => res.data)
           .catch(err => console.error(err.response))
         if (!response.tracks.items[0]) return null
@@ -21,7 +21,7 @@ class Spotify {
         break
 
       case 'artists':
-        response = await axios({method: 'get', url: baseURL + query + '&type=artist&market=US&limit=1', headers})
+        response = await axios({method: 'get', url: baseURL + query.normalize('NFD').replace(/[\u0300-\u036f]/g, '') + '&type=artist&market=US&limit=1', headers})
           .then(res => res.data)
           .catch(err => console.error(err.response))
         if (!response.artists.items[0]) return null
