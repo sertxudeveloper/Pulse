@@ -205,7 +205,7 @@
       updateTime () {
         this.status.interval = setInterval(function () {
           this.status.currentTime.original = this.$refs.audio.currentTime
-          if (this.status.currentTime.original === this.status.duration.original) this.endedSong()
+          if (parseFloat((this.status.currentTime.original).toFixed(1)) === parseFloat((this.status.duration.original).toFixed(1))) this.endedSong()
           let minutes = Math.floor(this.$refs.audio.currentTime / 60)
           let seconds = this.$refs.audio.currentTime - minutes * 60
           this.status.currentTime.minutes = this.setLeading(minutes)
