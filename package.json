@@ -59,7 +59,7 @@
     "async": "^2.6.2",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.0",
     "js-md5": "^0.7.3",
     "jsmediatags": "^3.8.1",
     "mongodb": "^3.1.13",
