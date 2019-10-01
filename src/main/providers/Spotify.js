@@ -1,7 +1,7 @@
 const axios = require('axios')
 const qs = require('qs')
-const SPOTIFY_CLIENT_ID = window.process.env.ELECTRON_WEBPACK_APP_SPOTIFY_CLIENT_ID
-const SPOTIFY_SECRET_ID = window.process.env.ELECTRON_WEBPACK_APP_SPOTIFY_SECRET_ID
+const SPOTIFY_CLIENT_ID = process.env.ELECTRON_WEBPACK_APP_SPOTIFY_CLIENT_ID
+const SPOTIFY_SECRET_ID = process.env.ELECTRON_WEBPACK_APP_SPOTIFY_SECRET_ID
 
 class Spotify {
 
