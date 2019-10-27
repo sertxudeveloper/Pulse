@@ -105,9 +105,9 @@ const taskQueue = queue((route, callback) => {
   })
 }, 1)
 
-taskQueue.drain = () => {
+taskQueue.drain( () => {
   process.send({finished: true})
-}
+});
 
 if (fs.lstatSync(route).isDirectory()) {
   getFolderElements(route)
